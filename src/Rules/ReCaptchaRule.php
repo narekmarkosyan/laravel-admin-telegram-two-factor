@@ -1,10 +1,10 @@
 <?php
 
-namespace Shanerutter\LaravelAdminEmailTwoFactor\Rules;
+namespace Narekmarkosyan\LaravelAdminTelegramTwoFactor\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use ReCaptcha\ReCaptcha;
-use Shanerutter\LaravelAdminEmailTwoFactor\AuthEmailTwoFactor;
+use Narekmarkosyan\LaravelAdminTelegramTwoFactor\AuthTelegramTwoFactor;
 
 class ReCaptchaRule implements Rule
 {
@@ -37,7 +37,7 @@ class ReCaptchaRule implements Rule
         }
 
         // Validate ReCaptcha
-        $resp = (new ReCaptcha(AuthEmailTwoFactor::config('recaptchaPrivateKey', '')))
+        $resp = (new ReCaptcha(AuthTelegramTwoFactor::config('recaptchaPrivateKey', '')))
             ->setExpectedHostname(request()->getHost())
             ->setScoreThreshold(0.5)
             ->verify($value, request()->ip());

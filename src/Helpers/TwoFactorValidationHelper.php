@@ -1,14 +1,15 @@
 <?php
 
-namespace Shanerutter\LaravelAdminEmailTwoFactor\Helpers;
+namespace Narekmarkosyan\LaravelAdminTelegramTwoFactor\Helpers;
 
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use Shanerutter\LaravelAdminEmailTwoFactor\AuthEmailTwoFactor;
-use Shanerutter\LaravelAdminEmailTwoFactor\Mail\TwoFactorCode;
+use Narekmarkosyan\LaravelAdminTelegramTwoFactor\AuthTelegramTwoFactor;
+use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Mail\TwoFactorCode;
 
 class TwoFactorValidationHelper
 {
@@ -40,7 +41,7 @@ class TwoFactorValidationHelper
 
     public static function twoFactorGenerateCode(Administrator $admin): int
     {
-        $code = rand(pow(10, AuthEmailTwoFactor::config('pinLength')-1), pow(10, AuthEmailTwoFactor::config('pinLength'))-1);;
+        $code = rand(pow(10, AuthTelegramTwoFactor::config('pinLength') - 1), pow(10, AuthTelegramTwoFactor::config('pinLength')) - 1);;
 
         Session::put('2fa', [
             'completed' => false,
@@ -50,11 +51,16 @@ class TwoFactorValidationHelper
             'expired_at' => now()->addMinutes(10),
         ]);
 
-        if (!empty($admin->email)) {
-            Mail::to($admin->email)->send(new TwoFactorCode($code));
+        if (!empty($admin->telegram_id)) {
+            Http::get(self::telegramURL() . http_build_query(['chat_id' => $admin->telegram_id, 'text' => sprintf("Admin 2FA code: %s", $code)]));
         }
 
         return $code;
+    }
+
+    public static function telegramURL(): string
+    {
+        return sprintf('"https://api.telegram.org/bot%s/sendMessage?', AuthTelegramTwoFactor::config('botKey'));
     }
 
     public static function twoFactorValidateCode(Administrator $admin, int $code)
@@ -84,12 +90,6 @@ class TwoFactorValidationHelper
         return false;
     }
 
-
-
-
-
-
-
     private static function twoFactorCheckCookies(): bool
     {
         // Get cookie contents
@@ -103,7 +103,7 @@ class TwoFactorValidationHelper
 
     private static function twoFactorSetCookies(): void
     {
-        Cookie::queue(cookie(self::twoFactorCookieName(), self::twoFactorCookieContents(), 1440 * AuthEmailTwoFactor::config('rememberDays')));
+        Cookie::queue(cookie(self::twoFactorCookieName(), self::twoFactorCookieContents(), 1440 * AuthTelegramTwoFactor::config('rememberDays')));
     }
 
     private static function twoFactorCookieName(): string
@@ -119,15 +119,6 @@ class TwoFactorValidationHelper
         $string .= '_' . md5(request()->userAgent()) . '_';
         return $string;
     }
-
-
-
-
-
-
-
-
-
 
 
 }

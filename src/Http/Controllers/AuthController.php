@@ -1,12 +1,12 @@
 <?php
 
-namespace Shanerutter\LaravelAdminEmailTwoFactor\Http\Controllers;
+namespace Narekmarkosyan\LaravelAdminTelegramTwoFactor\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Encore\Admin\Controllers\AuthController as BaseAuthController;
-use Shanerutter\LaravelAdminEmailTwoFactor\AuthEmailTwoFactor;
-use Shanerutter\LaravelAdminEmailTwoFactor\Helpers\TwoFactorValidationHelper;
+use Narekmarkosyan\LaravelAdminTelegramTwoFactor\AuthTelegramTwoFactor;
+use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Helpers\TwoFactorValidationHelper;
 
 class AuthController extends BaseAuthController
 {
@@ -21,7 +21,7 @@ class AuthController extends BaseAuthController
     public function getTwoFactor()
     {
         $this->permittedToView();
-        return view(AuthEmailTwoFactor::$group . '::2fa');
+        return view(AuthTelegramTwoFactor::$group . '::2fa');
     }
 
     public function postTwoFactor(Request $request): \Illuminate\Http\RedirectResponse
@@ -44,7 +44,7 @@ class AuthController extends BaseAuthController
     {
         Session::remove('2fa');
         TwoFactorValidationHelper::twoFactorCompleted(auth('admin')->user());
-        return redirect()->route(admin_get_route('auth.2fa.email'))->with('msgSuccess', 'New code has been emailed');
+        return redirect()->route(admin_get_route('auth.2fa.telegram'))->with('msgSuccess', 'New code has been send to your Telegram');
     }
 
 }

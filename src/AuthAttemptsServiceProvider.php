@@ -1,20 +1,22 @@
 <?php
 
-namespace Shanerutter\LaravelAdminEmailTwoFactor;
+namespace Narekmarkosyan\LaravelAdminTelegramTwoFactor;
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
-use Shanerutter\LaravelAdminEmailTwoFactor\Http\Middleware\AuthAdminEmailTwoFactor;
+use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Http\Middleware\AuthAdminTelegramTwoFactor;
 
 class AuthAttemptsServiceProvider extends ServiceProvider
 {
     /**
-     * @param AuthEmailTwoFactor $extension
+     * @param AuthTelegramTwoFactor $extension
+     * @param Router $router
+     * @param Kernel $kernel
      */
-    public function boot(AuthEmailTwoFactor $extension, Router $router, Kernel $kernel)
+    public function boot(AuthTelegramTwoFactor $extension, Router $router, Kernel $kernel)
     {
-        if (!AuthEmailTwoFactor::boot()) {
+        if (!AuthTelegramTwoFactor::boot()) {
             return;
         }
 
@@ -22,27 +24,27 @@ class AuthAttemptsServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         // Disabled
-        if (!AuthEmailTwoFactor::config('enable')) {
+        if (!AuthTelegramTwoFactor::config('enable')) {
             return;
         }
 
         // Register middleware
-        $router->aliasMiddleware('admin.auth.2fa.email', AuthAdminEmailTwoFactor::class);
-        $router->pushMiddlewareToGroup('admin', 'admin.auth.2fa.email');
+        $router->aliasMiddleware('admin.auth.2fa.telegram', AuthAdminTelegramTwoFactor::class);
+        $router->pushMiddlewareToGroup('admin', 'admin.auth.2fa.telegram');
 
         if ($views = $extension->views()) {
-            $this->loadViewsFrom($views, AuthEmailTwoFactor::$group);
+            $this->loadViewsFrom($views, AuthTelegramTwoFactor::$group);
         }
 
         if ($this->app->runningInConsole() && $assets = $extension->assets()) {
             $this->publishes(
-                [$assets => public_path('vendor/shanerutter/laravel-admin-email-two-factor')],
-                AuthEmailTwoFactor::$group
+                [$assets => public_path('vendor/narekmarkosyan/laravel-admin-telegram-two-factor')],
+                AuthTelegramTwoFactor::$group
             );
         }
 
         $this->app->booted(function () {
-            AuthEmailTwoFactor::routes(__DIR__ . '/../routes/web.php');
+            AuthTelegramTwoFactor::routes(__DIR__ . '/../routes/web.php');
         });
     }
 }

@@ -40,7 +40,7 @@
             </div>
         @endif
 
-        <p class="login-box-msg">You have received an email which contains two factor login code. If you haven't received it, press <a href="{{ route(admin_get_route('auth.2fa.email.resend')) }}">here</a>.</p>
+        <p class="login-box-msg">You have received a message in Telegram which contains two-factor login code. If you haven't received it, press <a href="{{ route(admin_get_route('auth.2fa.telegram.resend')) }}">here</a>.</p>
 
         <form action="{{ admin_url('auth/2fa') }}" method="post">
             <div class="form-group has-feedback {!! !$errors->has('code') ?: 'has-error' !!}">

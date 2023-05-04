@@ -1,32 +1,30 @@
 {
-    "name": "shanerutter/laravel-admin-email-two-factor",
-    "description": "Add email based two factor authentication to laravel-admin",
+    "name": "narekmarkosyan/laravel-admin-telegram-two-factor",
+    "description": "Add Telegram based two factor authentication to laravel-admin",
     "type": "library",
     "keywords": ["laravel-admin", "extension"],
-    "homepage": "https://github.com/shanerutter/laravel-admin-email-two-factor",
+    "homepage": "https://github.com/narekmarkosyan/laravel-admin-telegram-two-factor",
     "license": "MIT",
     "authors": [
         {
-            "name": "Shane Rutter",
-            "email": "shane@shanerutter.co.uk"
+            "name": "Narek Markosyan",
+            "email": "narek.markosyan@yahoo.com"
         }
     ],
     "require": {
-        "php": ">=7.0.0",
-        "encore/laravel-admin": "~1.6"
-    },
-    "require-dev": {
-
+        "php": ">=7.4.0",
+        "encore/laravel-admin": "~1.6",
+        "guzzlehttp/guzzle": "^7.5"
     },
     "autoload": {
         "psr-4": {
-            "Shanerutter\\LaravelAdminEmailTwoFactor\\": "src/"
+            "Narekmarkosyan\\LaravelAdminTelegramTwoFactor\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Shanerutter\\LaravelAdminEmailTwoFactor\\AuthAttemptsServiceProvider"
+                "Narekmarkosyan\\LaravelAdminTelegramTwoFactor\\AuthAttemptsServiceProvider"
             ]
         }
     }

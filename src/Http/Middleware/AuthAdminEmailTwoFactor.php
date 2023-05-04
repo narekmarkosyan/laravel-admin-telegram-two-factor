@@ -1,14 +1,14 @@
 <?php
 
-namespace Shanerutter\LaravelAdminEmailTwoFactor\Http\Middleware;
+namespace Narekmarkosyan\LaravelAdminTelegramTwoFactor\Http\Middleware;
 
 use App\Traits\ApiGenericResponse;
 use Closure;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
-use Shanerutter\LaravelAdminEmailTwoFactor\Helpers\TwoFactorValidationHelper;
+use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Helpers\TwoFactorValidationHelper;
 
-class AuthAdminEmailTwoFactor
+class AuthAdminTelegramTwoFactor
 {
     use ApiGenericResponse;
 
@@ -25,7 +25,7 @@ class AuthAdminEmailTwoFactor
 
         if(!TwoFactorValidationHelper::twoFactorCompleted($admin))
         {
-            abort(redirect(route(admin_get_route('auth.2fa.email'))));
+            abort(redirect(route(admin_get_route('auth.2fa.telegram'))));
         }
 
         return $next($request);
