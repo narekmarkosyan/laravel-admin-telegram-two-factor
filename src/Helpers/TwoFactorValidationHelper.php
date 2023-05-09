@@ -34,7 +34,7 @@ class TwoFactorValidationHelper
         return $fa['completed'];
     }
 
-    public function twoFactorPendingCodeValidation(Administrator $admin): bool
+    public static function twoFactorPendingCodeValidation(Administrator $admin): bool
     {
         return !self::twoFactorCompleted($admin);
     }
