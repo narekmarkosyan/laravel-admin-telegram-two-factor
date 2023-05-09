@@ -8,7 +8,7 @@ use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
 use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Helpers\TwoFactorValidationHelper;
 
-class AuthAdminTelegramTwoFactor
+class AuthAdminTelegramTwoFactor1
 {
     use ApiGenericResponse;
 
