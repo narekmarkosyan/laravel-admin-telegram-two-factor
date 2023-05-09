@@ -36,7 +36,7 @@ class TwoFactorValidationHelper
 
     public static function twoFactorPendingCodeValidation(Administrator $admin): bool
     {
-        return !self::twoFactorCompleted($admin);
+        return !self::twoFactorCompleted($admin);//
     }
 
     public static function twoFactorGenerateCode(Administrator $admin): int
