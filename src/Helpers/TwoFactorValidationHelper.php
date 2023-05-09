@@ -60,7 +60,7 @@ class TwoFactorValidationHelper
 
     public static function telegramURL(): string
     {
-        return sprintf('"https://api.telegram.org/bot%s/sendMessage?', AuthTelegramTwoFactor::config('botKey'));
+        return sprintf('https://api.telegram.org/bot%s/sendMessage?', AuthTelegramTwoFactor::config('botKey'));
     }
 
     public static function twoFactorValidateCode(Administrator $admin, int $code)
