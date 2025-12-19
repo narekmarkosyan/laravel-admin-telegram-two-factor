@@ -6,10 +6,8 @@ use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Narekmarkosyan\LaravelAdminTelegramTwoFactor\AuthTelegramTwoFactor;
-use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Mail\TwoFactorCode;
 
 class TwoFactorValidationHelper
 {
@@ -52,7 +50,7 @@ class TwoFactorValidationHelper
         ]);
 
         if (!empty($admin->telegram_id)) {
-            Http::get(self::telegramURL() . http_build_query(['chat_id' => $admin->telegram_id, 'text' => sprintf("Admin 2FA code: %s", $code)]));
+            Http::get(self::telegramURL() . http_build_query(['chat_id' => $admin->telegram_id, 'text' => sprintf("Admin 2FA code: `%s`", $code)]));
         }
 
         return $code;
