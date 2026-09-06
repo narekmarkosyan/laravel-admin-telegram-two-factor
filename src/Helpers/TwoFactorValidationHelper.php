@@ -50,7 +50,13 @@ class TwoFactorValidationHelper
         ]);
 
         if (!empty($admin->telegram_id)) {
-            Http::get(self::telegramURL() . http_build_query(['chat_id' => $admin->telegram_id, 'text' => sprintf("Admin 2FA code: `%s`", $code)]));
+            $appName = addcslashes((string) config('app.name'), '_*[]()~`>#+-=|{}.!\\');
+
+            Http::get(self::telegramURL() . http_build_query([
+                'chat_id' => $admin->telegram_id,
+                'text' => sprintf('\[%s\] Admin 2FA code: `%s`', $appName, $code),
+                'parse_mode' => 'MarkdownV2',
+            ]));
         }
 
         return $code;
