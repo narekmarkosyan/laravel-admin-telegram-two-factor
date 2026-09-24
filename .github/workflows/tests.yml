@@ -26,6 +26,9 @@ jobs:
           extensions: mbstring, pdo_sqlite
       - name: Install dependencies
         run: composer update --no-interaction --prefer-dist --no-progress --with="laravel/framework:^${{ matrix.laravel }}" --with="orchestra/testbench:^${{ matrix.testbench }}"
+        env:
+          # Laravel 11 has unresolved advisories; this job checks API compatibility only.
+          COMPOSER_NO_BLOCKING: ${{ matrix.laravel == '11.0' && '1' || '0' }}
       - name: Validate Composer metadata
         run: composer validate --strict --no-check-publish
       - name: Run tests

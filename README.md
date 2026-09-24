@@ -17,6 +17,11 @@ Laravel 11–13 compatible fork that retains the `Encore\Admin` namespace.
 If your application currently requires `encore/laravel-admin`, replace that
 dependency with `zen-geeks/laravel-admin` before installing this package.
 
+Laravel 11 is past its security support window and currently has advisories
+that may cause Composer to block installation. The Laravel 11 CI job disables
+advisory blocking only to verify API compatibility. Use Laravel 12 or 13 for
+deployments.
+
 ```
 composer require narekmarkosyan/laravel-admin-telegram-two-factor
 ```
