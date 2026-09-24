@@ -12,19 +12,21 @@ No way of doing it via UI has been implemented at this time.
 ### Installation
 
 Requires PHP 8.3 or newer and Laravel 11, 12, or 13. The package uses
-[`zen-geeks/laravel-admin`](https://github.com/zen-geeks/laravel-admin), a
-Laravel 11–13 compatible fork that retains the `Encore\Admin` namespace.
-If your application currently requires `encore/laravel-admin`, replace that
-dependency with `zen-geeks/laravel-admin` before installing this package.
+[`narekmarkosyan/laravel-admin`](https://github.com/narekmarkosyan/laravel-admin)
+v1.9.2 or newer, which retains the `Encore\Admin` Composer name and namespace.
+Add the fork as a VCS repository in the consuming application's root
+`composer.json` before installing this package. Composer does not inherit VCS
+repositories from dependencies:
+
+```
+composer config repositories.narek-laravel-admin vcs https://github.com/narekmarkosyan/laravel-admin
+composer require narekmarkosyan/laravel-admin-telegram-two-factor
+```
 
 Laravel 11 is past its security support window and currently has advisories
 that may cause Composer to block installation. The Laravel 11 CI job disables
 advisory blocking only to verify API compatibility. Use Laravel 12 or 13 for
 deployments.
-
-```
-composer require narekmarkosyan/laravel-admin-telegram-two-factor
-```
 
 ### Migration
 Add telegram_id field to admin users table.

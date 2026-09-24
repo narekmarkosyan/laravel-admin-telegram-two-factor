@@ -23,7 +23,7 @@ class CompatibilityTest extends TestCase
 
     protected function getEnvironmentSetUp($app): void
     {
-        $app['config']->set('admin', require __DIR__ . '/../vendor/zen-geeks/laravel-admin/config/admin.php');
+        $app['config']->set('admin', require __DIR__ . '/../vendor/encore/laravel-admin/config/admin.php');
         $app['config']->set('admin.extensions.auth-telegram-two-factor', [
             'enable' => true,
             'pinLength' => 6,

@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.3",
         "laravel/framework": "^11.0 || ^12.0 || ^13.0",
-        "zen-geeks/laravel-admin": "^3.0.6"
+        "encore/laravel-admin": "^1.9.2"
     },
     "require-dev": {
         "orchestra/testbench": "^9.13 || ^10.0 || ^11.0",
@@ -33,6 +33,12 @@
     "scripts": {
         "test": "phpunit"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/narekmarkosyan/laravel-admin"
+        }
+    ],
     "extra": {
         "laravel": {
             "providers": [
