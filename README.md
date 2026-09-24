@@ -11,6 +11,12 @@ No way of doing it via UI has been implemented at this time.
 
 ### Installation
 
+Requires PHP 8.3 or newer and Laravel 11, 12, or 13. The package uses
+[`zen-geeks/laravel-admin`](https://github.com/zen-geeks/laravel-admin), a
+Laravel 11–13 compatible fork that retains the `Encore\Admin` namespace.
+If your application currently requires `encore/laravel-admin`, replace that
+dependency with `zen-geeks/laravel-admin` before installing this package.
+
 ```
 composer require narekmarkosyan/laravel-admin-telegram-two-factor
 ```
@@ -28,9 +34,9 @@ In the extensions section of the `config/admin.php` file, add configurations
 'extensions' => [
     'auth-telegram-two-factor' => [
         'enable' => (bool)env('ADMIN_AUTH_TELEGRAM_TWO_FACTOR', true),
-        'botKey' => env('ADMIN_AUTH_TELEGRAM_TWO_FACTOR_BOT_KEY', true),
+        'botKey' => env('ADMIN_AUTH_TELEGRAM_TWO_FACTOR_BOT_KEY'),
         'pinLength' => (int)env('ADMIN_AUTH_TELEGRAM_TWO_FACTOR_PIN_LENGTH', 6),
-        'rememberDays' => (bool)env('ADMIN_AUTH_TELEGRAM_TWO_FACTOR_REMEMBER_DAYS', 1),
+        'rememberDays' => (int)env('ADMIN_AUTH_TELEGRAM_TWO_FACTOR_REMEMBER_DAYS', 1),
     ]
 ]
 ```
@@ -46,4 +52,3 @@ ADMIN_AUTH_TELEGRAM_TWO_FACTOR_REMEMBER_DAYS=1
 ### License
 
 Licensed under [The MIT License (MIT)](LICENSE).
-

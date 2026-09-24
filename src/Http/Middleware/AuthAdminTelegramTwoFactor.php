@@ -2,7 +2,6 @@
 
 namespace Narekmarkosyan\LaravelAdminTelegramTwoFactor\Http\Middleware;
 
-use App\Traits\ApiGenericResponse;
 use Closure;
 use Encore\Admin\Auth\Database\Administrator;
 use Illuminate\Http\Request;
@@ -10,8 +9,6 @@ use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Helpers\TwoFactorValidationHelp
 
 class AuthAdminTelegramTwoFactor
 {
-    use ApiGenericResponse;
-
     public function handle(Request $request, Closure $next)
     {
         /** @var Administrator $admin */
@@ -23,9 +20,8 @@ class AuthAdminTelegramTwoFactor
             return $next($request);
         }
 
-        if(!TwoFactorValidationHelper::twoFactorCompleted($admin))
-        {
-            abort(redirect(route(admin_get_route('auth.2fa.telegram'))));
+        if (!TwoFactorValidationHelper::twoFactorCompleted($admin)) {
+            return redirect()->route(admin_get_route('auth.2fa.telegram'));
         }
 
         return $next($request);

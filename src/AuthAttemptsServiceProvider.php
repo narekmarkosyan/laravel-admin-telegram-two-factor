@@ -2,7 +2,6 @@
 
 namespace Narekmarkosyan\LaravelAdminTelegramTwoFactor;
 
-use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Http\Middleware\AuthAdminTelegramTwoFactor;
@@ -12,9 +11,8 @@ class AuthAttemptsServiceProvider extends ServiceProvider
     /**
      * @param AuthTelegramTwoFactor $extension
      * @param Router $router
-     * @param Kernel $kernel
      */
-    public function boot(AuthTelegramTwoFactor $extension, Router $router, Kernel $kernel)
+    public function boot(AuthTelegramTwoFactor $extension, Router $router)
     {
         if (!AuthTelegramTwoFactor::boot()) {
             return;

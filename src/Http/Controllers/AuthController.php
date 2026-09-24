@@ -11,30 +11,36 @@ use Narekmarkosyan\LaravelAdminTelegramTwoFactor\Helpers\TwoFactorValidationHelp
 class AuthController extends BaseAuthController
 {
 
-    private function permittedToView()
+    private function permittedToView(): bool
     {
-        if (!$this->guard()->check() || !TwoFactorValidationHelper::twoFactorPendingCodeValidation(request()->user('admin'))) {
-            abort(redirect(admin_url()));
-        }
+        return $this->guard()->check()
+            && TwoFactorValidationHelper::twoFactorPendingCodeValidation(request()->user('admin'));
     }
 
     public function getTwoFactor()
     {
-        $this->permittedToView();
+        if (!$this->permittedToView()) {
+            return redirect(admin_url());
+        }
         return view(AuthTelegramTwoFactor::$group . '::2fa');
     }
 
     public function postTwoFactor(Request $request): \Illuminate\Http\RedirectResponse
     {
-        $this->permittedToView();
+        if (!$this->permittedToView()) {
+            return redirect(admin_url());
+        }
 
         $request->validate([
             'code' => 'integer|required',
         ]);
 
-        if(TwoFactorValidationHelper::twoFactorValidateCode(auth('admin')->user(), (int)$request->get('code')))
-        {
+        if (TwoFactorValidationHelper::twoFactorValidateCode(auth('admin')->user(), (int) $request->get('code'))) {
             return redirect(admin_url());
+        }
+
+        if (!$this->guard()->check()) {
+            return redirect(admin_url())->withErrors(['code' => 'Code has expired, please login again.']);
         }
 
         return redirect()->back()->withErrors(['code' => 'Incorrect code entered']);
@@ -42,9 +48,13 @@ class AuthController extends BaseAuthController
 
     public function getTwoFactorResend(): \Illuminate\Http\RedirectResponse
     {
-        Session::remove('2fa');
+        if (!$this->guard()->check()) {
+            return redirect(admin_url());
+        }
+
+        Session::forget('2fa');
         TwoFactorValidationHelper::twoFactorCompleted(auth('admin')->user());
-        return redirect()->route(admin_get_route('auth.2fa.telegram'))->with('msgSuccess', 'New code has been send to your Telegram');
+        return redirect()->route(admin_get_route('auth.2fa.telegram'))->with('msgSuccess', 'New code has been sent to your Telegram');
     }
 
 }

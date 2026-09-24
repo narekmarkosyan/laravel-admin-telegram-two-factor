@@ -26,7 +26,7 @@ class AddAdministratorTelegramFieldTable extends Migration
     public function down()
     {
         Schema::table('admin_users', function (Blueprint $table) {
-            $table->removeColumn('telegram_id');
+            $table->dropColumn('telegram_id');
         });
     }
 }

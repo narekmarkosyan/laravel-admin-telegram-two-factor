@@ -3,7 +3,6 @@
 namespace Narekmarkosyan\LaravelAdminTelegramTwoFactor\Helpers;
 
 use Encore\Admin\Auth\Database\Administrator;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
@@ -19,33 +18,34 @@ class TwoFactorValidationHelper
 
         // Remember me cookie
         if (self::twoFactorCheckCookies()) {
-            Session::put('2fa', ['completed' => true]);
+            Session::put('2fa', ['completed' => true, 'id' => $admin->id]);
             return true;
         }
 
         // Data is missing
-        if (empty($fa)) {
+        if (empty($fa) || ($fa['id'] ?? null) !== $admin->id) {
             self::twoFactorGenerateCode($admin);
             return false;
         }
 
-        return $fa['completed'];
+        return (bool) ($fa['completed'] ?? false);
     }
 
     public static function twoFactorPendingCodeValidation(Administrator $admin): bool
     {
-        return !self::twoFactorCompleted($admin);//
+        return !self::twoFactorCompleted($admin);
     }
 
     public static function twoFactorGenerateCode(Administrator $admin): int
     {
-        $code = rand(pow(10, AuthTelegramTwoFactor::config('pinLength') - 1), pow(10, AuthTelegramTwoFactor::config('pinLength')) - 1);;
+        $pinLength = (int) AuthTelegramTwoFactor::config('pinLength', 6);
+        $code = random_int(10 ** ($pinLength - 1), 10 ** $pinLength - 1);
 
         Session::put('2fa', [
             'completed' => false,
             'code' => $code,
             'requested_at' => now(),
-            'id' => auth('admin')->user()->id,
+            'id' => $admin->id,
             'expired_at' => now()->addMinutes(10),
         ]);
 
@@ -67,7 +67,7 @@ class TwoFactorValidationHelper
         return sprintf('https://api.telegram.org/bot%s/sendMessage?', AuthTelegramTwoFactor::config('botKey'));
     }
 
-    public static function twoFactorValidateCode(Administrator $admin, int $code)
+    public static function twoFactorValidateCode(Administrator $admin, int $code): bool
     {
         if (!self::twoFactorPendingCodeValidation($admin)) {
             return false;
@@ -80,12 +80,12 @@ class TwoFactorValidationHelper
         if (!empty($fa['code']) && $code === $fa['code']) {
             // Check code has not expired
             if ($fa['expired_at']->lt(now())) {
-                Session::remove('2fa');
-                Auth::logout();
-                return redirect(admin_url())->withErrors('Code has expired, please login again.');
+                Session::forget('2fa');
+                auth('admin')->logout();
+                return false;
             }
 
-            Session::put('2fa', ['completed' => true]);
+            Session::put('2fa', ['completed' => true, 'id' => $admin->id]);
             self::twoFactorSetCookies();
 
             return true;
